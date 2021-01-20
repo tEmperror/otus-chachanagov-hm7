@@ -1,0 +1,53 @@
+replicaCount: 1
+
+deployment:
+  name: crud-deployment
+  image:
+    repo: temperror/otus-chachanagov-hm:6-app
+    pullPolicy: Always
+  label: crud-app
+  container:
+    name: crud-pod
+    portName: web
+    port: 80
+service:
+  name: crud-service
+  label: crud-service-label
+  type: NodePort
+  protocol: TCP
+  portName: service-web
+  port: 8000
+
+ingress:
+  host: arch.homework
+  name: crud-ingress
+
+postgresql:
+  fullnameOverride: pg-db
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  postgresqlDatabase: postgres
+  service:
+    port: "5432"
+
+auth:
+  service:
+    name: auth-service
+    port: 8000
+  url: /api/auth/auth
+  signin: /api/auth/signin
+  path: /api/client
+
+  billingServiceName: billing-service
+  billingServicePort: 8000
+  billingServicePath: /api/account
+
+  orderServiceName: order-service
+  orderServicePort: 8000
+  orderServicePath: /api/order
+
+  notificationServiceName: notification-service
+  notificationServicePort: 8000
+  notificationServicePath: /api/notification
+
+  pathType: Prefix

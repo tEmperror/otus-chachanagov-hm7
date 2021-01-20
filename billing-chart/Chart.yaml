@@ -1,0 +1,7 @@
+apiVersion: v2
+name: billing-chart
+description: A Helm chart for billing
+
+type: application
+version: 0.1.0
+appVersion: v1.0

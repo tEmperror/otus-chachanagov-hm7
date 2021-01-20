@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.label }}
+    spec:
+      containers:
+        - name: {{ .Values.deployment.container.name }}
+          image: {{ .Values.deployment.image.repo }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          ports:
+            - name: {{ .Values.deployment.container.portName }}
+              containerPort: {{ .Values.deployment.container.port }}
+          env:
+            - name: spring_kafka_bootstrap_server
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-secrets
+                  key: spring_kafka_bootstrap_server
+            - name: spring_kafka_producer_client_id
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-secrets
+                  key: spring_kafka_producer_client_id
+            - name: spring_kafka_consumer_group_id
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-secrets
+                  key: spring_kafka_consumer_group_id
+            - name: kafka_notification_topic_name
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-secrets
+                  key: kafka_notification_topic_name

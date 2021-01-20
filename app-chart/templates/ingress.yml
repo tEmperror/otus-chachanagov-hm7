@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name }}-auth
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "http://{{ .Values.auth.service.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.auth.service.port }}{{ .Values.auth.url }}"
+    nginx.ingress.kubernetes.io/auth-signin: "http://$host{{ .Values.auth.signin }}"
+    nginx.ingress.kubernetes.io/auth-response-headers: "X-Client-Id"
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ .Values.service.name }}
+              servicePort: {{ .Values.service.port }}
+            path: {{ .Values.auth.path }}
+            pathType: {{ .Values.auth.pathType }}
+          - backend:
+              serviceName: {{ .Values.auth.billingServiceName }}
+              servicePort: {{ .Values.auth.billingServicePort }}
+            path: {{ .Values.auth.billingServicePath }}
+            pathType: {{ .Values.auth.pathType }}
+          - backend:
+              serviceName: {{ .Values.auth.orderServiceName }}
+              servicePort: {{ .Values.auth.orderServicePort }}
+            path: {{ .Values.auth.orderServicePath }}
+            pathType: {{ .Values.auth.pathType }}
+          - backend:
+              serviceName: {{ .Values.auth.notificationServiceName }}
+              servicePort: {{ .Values.auth.notificationServicePort }}
+            path: {{ .Values.auth.notificationServicePath }}
+            pathType: {{ .Values.auth.pathType }}

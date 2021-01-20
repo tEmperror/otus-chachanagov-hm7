@@ -1,0 +1,31 @@
+replicaCount: 1
+
+app:
+  withdrawUrl: http://billing-service.order-app.svc.cluster.local:8000/api/account/balance
+
+deployment:
+  name: order-deployment
+  image:
+    repo: temperror/otus-chachanagov-hm:7-order
+    pullPolicy: Always
+  label: order-app
+  container:
+    name: order-pod
+    portName: web
+    port: 80
+service:
+  name: order-service
+  label: order-service-label
+  type: NodePort
+  protocol: TCP
+  portName: service-web
+  port: 8000
+
+kafka:
+  fullnameOverride: kafka-app
+  port: "9092"
+  clientId: kafka-client
+  consumerGroup: notification-group
+  notificationTopicName: notification-topic
+  replicas: 1
+

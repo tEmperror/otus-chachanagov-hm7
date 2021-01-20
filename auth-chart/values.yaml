@@ -1,0 +1,20 @@
+replicaCount: 1
+
+deployment:
+  name: auth-deployment
+  image:
+    repo: temperror/otus-chachanagov-hm:6-auth
+    pullPolicy: Always
+  label: auth-app
+  container:
+    name: auth-pod
+    portName: web
+    port: 80
+
+service:
+  name: auth-service
+  label: auth-service-label
+  type: NodePort
+  protocol: TCP
+  portName: service-web
+  port: 8000

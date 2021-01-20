@@ -1,0 +1,20 @@
+replicaCount: 1
+
+deployment:
+  name: billing-deployment
+  image:
+    repo: temperror/otus-chachanagov-hm:6-billing
+    pullPolicy: Always
+  label: billing-app
+  container:
+    name: billing-pod
+    portName: web
+    port: 80
+
+service:
+  name: billing-service
+  label: billing-service-label
+  type: NodePort
+  protocol: TCP
+  portName: service-web
+  port: 8000
